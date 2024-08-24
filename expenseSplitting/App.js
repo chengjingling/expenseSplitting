@@ -1,62 +1,23 @@
-import { useState, useEffect } from "react";
-import { SafeAreaView, View, Text, StyleSheet } from "react-native";
-import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "./src/config/firebase";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import Groups from "./src/components/Groups";
+import Group from "./src/components/Group";
 
-export default function App() {
-  const [expenses, setExpenses] = useState({});
-  const [users, setUsers] = useState({});
+const Stack = createStackNavigator();
 
-  useEffect(() => {
-    const expensesCollection = collection(db, "groups", "JB", "expenses");
-    onSnapshot(expensesCollection, (snapshot) => {
-      const expensesObj = snapshot.docs.reduce((acc, doc) => {
-        acc[doc.id] = doc.data();
-        return acc;
-      }, {});
-      setExpenses(expensesObj);
-    });
-    const usersCollection = collection(db, "groups", "JB", "users");
-    onSnapshot(usersCollection, (snapshot) => {
-      const usersObj = snapshot.docs.reduce((acc, doc) => {
-        acc[doc.id] = doc.data();
-        return acc;
-      }, {});
-      setUsers(usersObj);
-    });
-  }, []);
-
+const App = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-        {Object.entries(expenses).map(([id, expense]) => (
-          <View key={id}>
-            <Text>{expense.title}</Text>
-            <Text>{expense.dateTime}</Text>
-            <Text>{expense.amount}</Text>
-            <Text>
-              {users[expense.paidBy]?.firstName}{" "}
-              {users[expense.paidBy]?.lastName}
-            </Text>
-            {expense.participants.map((participantId) => (
-              <View key={participantId}>
-                <Text>
-                  {users[participantId]?.firstName}{" "}
-                  {users[participantId]?.lastName}
-                </Text>
-              </View>
-            ))}
-          </View>
-        ))}
-      </View>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Groups" component={Groups} />
+        <Stack.Screen
+          name="Group"
+          component={Group}
+          options={{ headerTitle: "" }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default App;
