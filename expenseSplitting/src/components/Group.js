@@ -4,13 +4,12 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../config/firebase";
 
 const Group = ({ route }) => {
-  const { groupTitle } = route.params;
+  const { title } = route.params;
   const [tab, setTab] = useState("Expenses");
   const [expenses, setExpenses] = useState({});
-  const [users, setUsers] = useState({});
 
   useEffect(() => {
-    const expensesCollection = collection(db, "groups", groupTitle, "expenses");
+    const expensesCollection = collection(db, "groups", title, "expenses");
     onSnapshot(expensesCollection, (snapshot) => {
       const expensesObj = snapshot.docs.reduce((acc, doc) => {
         acc[doc.id] = doc.data();
@@ -18,20 +17,12 @@ const Group = ({ route }) => {
       }, {});
       setExpenses(expensesObj);
     });
-    const usersCollection = collection(db, "groups", groupTitle, "users");
-    onSnapshot(usersCollection, (snapshot) => {
-      const usersObj = snapshot.docs.reduce((acc, doc) => {
-        acc[doc.id] = doc.data();
-        return acc;
-      }, {});
-      setUsers(usersObj);
-    });
   }, []);
 
   return (
     <SafeAreaView>
       <View>
-        <Text>{groupTitle}</Text>
+        <Text>{title}</Text>
         <TouchableOpacity onPress={() => setTab("Expenses")}>
           <Text>Expenses</Text>
         </TouchableOpacity>
@@ -42,10 +33,7 @@ const Group = ({ route }) => {
           Object.entries(expenses).map(([id, expense]) => (
             <View key={id}>
               <Text>{expense.title}</Text>
-              <Text>
-                Paid by {users[expense.paidBy]?.firstName}{" "}
-                {users[expense.paidBy]?.lastName}
-              </Text>
+              <Text>Paid by {expense.paidBy}</Text>
               <Text>${expense.amount}</Text>
             </View>
           ))}
