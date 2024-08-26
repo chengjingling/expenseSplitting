@@ -5,6 +5,7 @@ import Groups from "./src/components/Groups";
 import CreateGroup from "./src/components/CreateGroup";
 import Group from "./src/components/Group";
 import CreateExpense from "./src/components/CreateExpense";
+import Expense from "./src/components/Expense";
 
 const Stack = createStackNavigator();
 
@@ -46,6 +47,7 @@ const App = () => {
           }}
         />
         <Stack.Screen name="Add Expense" component={CreateExpense} />
+        <Stack.Screen name="Expense" component={Expense} />
       </Stack.Navigator>
     </NavigationContainer>
   );

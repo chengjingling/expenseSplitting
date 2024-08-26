@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../config/firebase";
+import { useNavigation } from "@react-navigation/native";
 
 const Group = ({ route }) => {
   const { groupTitle } = route.params;
   const [tab, setTab] = useState("Expenses");
   const [expenses, setExpenses] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const expensesCollection = collection(db, "groups", groupTitle, "expenses");
@@ -34,11 +36,14 @@ const Group = ({ route }) => {
         </TouchableOpacity>
         {tab === "Expenses" &&
           expenses.map((expense, index) => (
-            <View key={index}>
+            <TouchableOpacity
+              key={index}
+              onPress={() => navigation.navigate("Expense", { expense })}
+            >
               <Text>{expense.title}</Text>
               <Text>Paid by {expense.paidBy}</Text>
-              <Text>${expense.amount}</Text>
-            </View>
+              <Text>${Number(expense.amount).toFixed(2)}</Text>
+            </TouchableOpacity>
           ))}
         {tab === "Balances" && <Text>Balances</Text>}
       </View>
