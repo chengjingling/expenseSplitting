@@ -19,9 +19,9 @@ const Groups = () => {
   return (
     <SafeAreaView>
       <View>
-        {groupTitles.map((groupTitle) => (
+        {groupTitles.map((groupTitle, index) => (
           <TouchableOpacity
-            key={groupTitle}
+            key={index}
             onPress={() => navigation.navigate("Group", { groupTitle })}
           >
             <Text>{groupTitle}</Text>

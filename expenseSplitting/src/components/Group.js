@@ -6,16 +6,19 @@ import { db } from "../config/firebase";
 const Group = ({ route }) => {
   const { groupTitle } = route.params;
   const [tab, setTab] = useState("Expenses");
-  const [expenses, setExpenses] = useState({});
+  const [expenses, setExpenses] = useState([]);
 
   useEffect(() => {
     const expensesCollection = collection(db, "groups", groupTitle, "expenses");
     onSnapshot(expensesCollection, (snapshot) => {
-      const expensesObj = snapshot.docs.reduce((acc, doc) => {
-        acc[doc.id] = doc.data();
-        return acc;
-      }, {});
-      setExpenses(expensesObj);
+      const expensesList = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      const sortedExpensesList = expensesList.sort(
+        (a, b) => b.dateTimeAdded - a.dateTimeAdded
+      );
+      setExpenses(sortedExpensesList);
     });
   }, []);
 
@@ -30,8 +33,8 @@ const Group = ({ route }) => {
           <Text>Balances</Text>
         </TouchableOpacity>
         {tab === "Expenses" &&
-          Object.entries(expenses).map(([id, expense]) => (
-            <View key={id}>
+          expenses.map((expense, index) => (
+            <View key={index}>
               <Text>{expense.title}</Text>
               <Text>Paid by {expense.paidBy}</Text>
               <Text>${expense.amount}</Text>

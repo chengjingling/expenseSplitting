@@ -58,6 +58,7 @@ const CreateExpense = ({ route }) => {
         amount: amount,
         paidBy: paidBy,
         participants: allParticipants.filter((_, index) => checked[index]),
+        dateTimeAdded: new Date(),
       });
       Alert.alert("Success", "Expense added!");
       navigation.navigate("Group", { groupTitle });
