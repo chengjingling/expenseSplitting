@@ -22,7 +22,7 @@ const Groups = () => {
         {groupTitles.map((groupTitle) => (
           <TouchableOpacity
             key={groupTitle}
-            onPress={() => navigation.navigate("Group", { title: groupTitle })}
+            onPress={() => navigation.navigate("Group", { groupTitle })}
           >
             <Text>{groupTitle}</Text>
           </TouchableOpacity>

@@ -4,12 +4,12 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../config/firebase";
 
 const Group = ({ route }) => {
-  const { title } = route.params;
+  const { groupTitle } = route.params;
   const [tab, setTab] = useState("Expenses");
   const [expenses, setExpenses] = useState({});
 
   useEffect(() => {
-    const expensesCollection = collection(db, "groups", title, "expenses");
+    const expensesCollection = collection(db, "groups", groupTitle, "expenses");
     onSnapshot(expensesCollection, (snapshot) => {
       const expensesObj = snapshot.docs.reduce((acc, doc) => {
         acc[doc.id] = doc.data();
@@ -22,7 +22,7 @@ const Group = ({ route }) => {
   return (
     <SafeAreaView>
       <View>
-        <Text>{title}</Text>
+        <Text>{groupTitle}</Text>
         <TouchableOpacity onPress={() => setTab("Expenses")}>
           <Text>Expenses</Text>
         </TouchableOpacity>

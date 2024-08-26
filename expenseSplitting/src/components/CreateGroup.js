@@ -57,7 +57,7 @@ const CreateGroup = () => {
       setDoc(newDoc, {
         participants: participants,
       });
-      navigation.navigate("Group", { title: title });
+      navigation.navigate("Group", { groupTitle: title });
     }
   }, [participantsValid]);
 
@@ -95,11 +95,9 @@ const CreateGroup = () => {
         >
           <Text>Add participant</Text>
         </TouchableOpacity>
-        <View>
-          <TouchableOpacity onPress={() => createGroup()}>
-            <Text>Create</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={() => createGroup()}>
+          <Text>Create</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

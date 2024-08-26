@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Groups from "./src/components/Groups";
 import CreateGroup from "./src/components/CreateGroup";
 import Group from "./src/components/Group";
+import CreateExpense from "./src/components/CreateExpense";
 
 const Stack = createStackNavigator();
 
@@ -19,7 +20,7 @@ const App = () => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("New Group")}
               >
-                <Text>+</Text>
+                <Text>New Group</Text>
               </TouchableOpacity>
             ),
           })}
@@ -28,8 +29,23 @@ const App = () => {
         <Stack.Screen
           name="Group"
           component={Group}
-          options={{ headerTitle: "" }}
+          options={({ route, navigation }) => {
+            const { groupTitle } = route.params;
+            return {
+              headerTitle: "",
+              headerRight: () => (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Add Expense", { groupTitle })
+                  }
+                >
+                  <Text>Add Expense</Text>
+                </TouchableOpacity>
+              ),
+            };
+          }}
         />
+        <Stack.Screen name="Add Expense" component={CreateExpense} />
       </Stack.Navigator>
     </NavigationContainer>
   );
