@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  StyleSheet,
   Alert,
 } from "react-native";
 import { getDoc, doc, collection, addDoc } from "firebase/firestore";
@@ -66,25 +67,44 @@ const CreateExpense = ({ route }) => {
   };
 
   return (
-    <SafeAreaView>
-      <View>
-        <Text>Title</Text>
-        <TextInput value={expenseTitle} onChangeText={setExpenseTitle} />
-        <Text>Amount</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <Text style={styles.label}>Title</Text>
+        <TextInput
+          value={expenseTitle}
+          onChangeText={setExpenseTitle}
+          style={styles.input}
+        />
+        <Text style={styles.label}>Amount</Text>
         <TextInput
           value={amount}
           onChangeText={setAmount}
           keyboardType="numeric"
+          style={styles.input}
         />
-        <Text>Paid by</Text>
-        <Picker selectedValue={paidBy} onValueChange={setPaidBy}>
+        <Text style={styles.label}>Paid by</Text>
+        <Picker
+          selectedValue={paidBy}
+          onValueChange={setPaidBy}
+          style={styles.picker}
+        >
           {allParticipants.map((participant, index) => (
             <Picker.Item key={index} label={participant} value={participant} />
           ))}
         </Picker>
-        <Text>Participants</Text>
+        <Text style={styles.label}>Participants</Text>
         {allParticipants.map((participant, index) => (
-          <View key={index}>
+          <TouchableOpacity
+            key={index}
+            onPress={() =>
+              setChecked(
+                checked.map((isChecked, i) =>
+                  i === index ? !isChecked : isChecked
+                )
+              )
+            }
+            style={styles.checkboxButton}
+          >
             <CheckBox
               value={checked[index]}
               onValueChange={(value) =>
@@ -94,16 +114,64 @@ const CreateExpense = ({ route }) => {
                   )
                 )
               }
+              style={styles.checkbox}
             />
             <Text>{participant}</Text>
-          </View>
+          </TouchableOpacity>
         ))}
-        <TouchableOpacity onPress={() => createExpense()}>
-          <Text>Add</Text>
+        <TouchableOpacity
+          onPress={() => createExpense()}
+          style={styles.addButton}
+        >
+          <Text style={styles.addText}>Add</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  label: {
+    marginBottom: 5,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "gray",
+    padding: 8,
+    borderRadius: 4,
+    marginBottom: 20,
+  },
+  picker: {
+    transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],
+    marginTop: -22,
+    marginBottom: -2,
+  },
+  checkboxButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#ddd",
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 5,
+  },
+  checkbox: {
+    marginRight: 10,
+  },
+  addButton: {
+    borderWidth: 1,
+    borderColor: "#0275d8",
+    backgroundColor: "#0275d8",
+    padding: 8,
+    borderRadius: 4,
+    alignItems: "center",
+    marginTop: 15,
+  },
+  addText: {
+    color: "white",
+  },
+});
 
 export default CreateExpense;

@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  StyleSheet,
   Alert,
 } from "react-native";
 import { doc, collection, setDoc } from "firebase/firestore";
@@ -62,45 +63,119 @@ const CreateGroup = () => {
   }, [participantsValid]);
 
   return (
-    <SafeAreaView>
-      <View>
-        <Text>Title</Text>
-        <TextInput value={title} onChangeText={setTitle} />
-        <Text>Participants</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <Text style={styles.label}>Title</Text>
+        <TextInput
+          value={title}
+          onChangeText={setTitle}
+          style={styles.titleInput}
+        />
+        <Text style={styles.label}>Participants</Text>
         {participants.map((participant, index) => (
-          <View key={index}>
-            <View>
+          <View key={index} style={styles.participantRowContainer}>
+            <View style={styles.participantRow}>
               <TextInput
                 value={participant}
                 onChangeText={(text) => handleParticipantChange(text, index)}
+                style={styles.participantInput}
               />
               <TouchableOpacity
                 onPress={() =>
                   setParticipants(participants.filter((_, i) => i !== index))
                 }
+                style={styles.removeButton}
               >
-                <Text>Remove</Text>
+                <Text style={styles.buttonText}>Remove</Text>
               </TouchableOpacity>
             </View>
             {participantsValid[index] === "blank" && (
-              <Text>Participant cannot be blank.</Text>
+              <Text style={styles.invalidText}>
+                Participant cannot be blank.
+              </Text>
             )}
             {participantsValid[index] === "duplicate" && (
-              <Text>This participant has already been entered.</Text>
+              <Text style={styles.invalidText}>
+                This participant has already been entered.
+              </Text>
             )}
           </View>
         ))}
         <TouchableOpacity
           onPress={() => setParticipants([...participants, ""])}
+          style={styles.addParticipantButton}
         >
-          <Text>Add participant</Text>
+          <Text style={styles.addParticipantText}>Add participant</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => createGroup()}>
-          <Text>Create</Text>
+        <TouchableOpacity
+          onPress={() => createGroup()}
+          style={styles.createButton}
+        >
+          <Text style={styles.buttonText}>Create</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  label: {
+    marginBottom: 5,
+  },
+  titleInput: {
+    borderWidth: 1,
+    borderColor: "gray",
+    padding: 8,
+    borderRadius: 4,
+    marginBottom: 20,
+  },
+  participantRowContainer: {
+    marginBottom: 5,
+  },
+  participantRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 5,
+  },
+  participantInput: {
+    borderWidth: 1,
+    borderColor: "gray",
+    padding: 8,
+    borderRadius: 4,
+    width: "78%",
+  },
+  removeButton: {
+    borderWidth: 1,
+    borderColor: "#dc3545",
+    backgroundColor: "#dc3545",
+    padding: 8,
+    borderRadius: 4,
+  },
+  buttonText: {
+    color: "white",
+  },
+  invalidText: {
+    color: "#dc3545",
+    marginBottom: 5,
+  },
+  addParticipantButton: {
+    marginBottom: 20,
+  },
+  addParticipantText: {
+    color: "#0275d8",
+  },
+  createButton: {
+    borderWidth: 1,
+    borderColor: "#0275d8",
+    backgroundColor: "#0275d8",
+    padding: 8,
+    borderRadius: 4,
+    alignItems: "center",
+  },
+});
 
 export default CreateGroup;

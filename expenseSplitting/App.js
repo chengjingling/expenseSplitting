@@ -1,4 +1,4 @@
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Groups from "./src/components/Groups";
@@ -20,8 +20,9 @@ const App = () => {
             headerRight: () => (
               <TouchableOpacity
                 onPress={() => navigation.navigate("New Group")}
+                style={styles.rightButton}
               >
-                <Text>New Group</Text>
+                <Text style={styles.rightButtonText}>New Group</Text>
               </TouchableOpacity>
             ),
           })}
@@ -39,8 +40,9 @@ const App = () => {
                   onPress={() =>
                     navigation.navigate("Add Expense", { groupTitle })
                   }
+                  style={styles.rightButton}
                 >
-                  <Text>Add Expense</Text>
+                  <Text style={styles.rightButtonText}>Add Expense</Text>
                 </TouchableOpacity>
               ),
             };
@@ -52,5 +54,14 @@ const App = () => {
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  rightButton: {
+    marginRight: 10,
+  },
+  rightButtonText: {
+    color: "#0275d8",
+  },
+});
 
 export default App;

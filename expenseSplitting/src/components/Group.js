@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import { getDoc, doc, collection, onSnapshot } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -75,43 +81,90 @@ const Group = ({ route }) => {
       if (creditors[creditorIndex].amount === 0) creditorIndex++;
       if (debtors[debtorIndex].amount === 0) debtorIndex++;
     }
-    setReimbursements(reimbursementsList);
+    const filteredReimbursementsList = reimbursementsList.filter(
+      (reimbursement) => reimbursement.amount.toFixed(2) !== "0.00"
+    );
+    setReimbursements(filteredReimbursementsList);
   };
 
   return (
-    <SafeAreaView>
-      <View>
-        <Text>{groupTitle}</Text>
-        <TouchableOpacity onPress={() => setTab("Expenses")}>
-          <Text>Expenses</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => changeToBalances()}>
-          <Text>Balances</Text>
-        </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <Text style={styles.groupTitleText}>{groupTitle}</Text>
+        <View style={styles.tabsRow}>
+          <TouchableOpacity
+            onPress={() => setTab("Expenses")}
+            style={[
+              styles.expensesTab,
+              tab === "Expenses" ? styles.activeTab : styles.inactiveTab,
+            ]}
+          >
+            <Text style={tab === "Expenses" && styles.activeText}>
+              Expenses
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => changeToBalances()}
+            style={[
+              styles.balancesTab,
+              tab === "Balances" ? styles.activeTab : styles.inactiveTab,
+            ]}
+          >
+            <Text style={tab === "Balances" && styles.activeText}>
+              Balances
+            </Text>
+          </TouchableOpacity>
+        </View>
         {tab === "Expenses" &&
           expenses.map((expense, index) => (
             <TouchableOpacity
               key={index}
               onPress={() => navigation.navigate("Expense", { expense })}
+              style={styles.expenseButton}
             >
-              <Text>{expense.title}</Text>
-              <Text>Paid by {expense.paidBy}</Text>
-              <Text>${Number(expense.amount).toFixed(2)}</Text>
+              <View>
+                <Text style={styles.largerText}>{expense.title}</Text>
+                <Text style={styles.paidByText}>Paid by {expense.paidBy}</Text>
+              </View>
+              <Text style={styles.largerText}>
+                ${Number(expense.amount).toFixed(2)}
+              </Text>
             </TouchableOpacity>
           ))}
         {tab === "Balances" && (
           <View>
+            <Text style={styles.balancesText}>Balances</Text>
             {Object.entries(balances).map(([participant, balance]) => (
-              <View key={participant}>
-                <Text>{participant}</Text>
-                <Text>{balance.toFixed(2)}</Text>
+              <View key={participant} style={styles.balanceRow}>
+                <Text style={styles.largerText}>{participant}</Text>
+                <Text
+                  style={[
+                    balance.toFixed(2) === "0.00" ||
+                    balance.toFixed(2) === "-0.00"
+                      ? styles.zeroBalanceText
+                      : balance > 0
+                      ? styles.positiveBalanceText
+                      : styles.negativeBalanceText,
+                  ]}
+                >
+                  {balance.toFixed(2) === "0.00" ||
+                  balance.toFixed(2) === "-0.00"
+                    ? "$0.00"
+                    : balance > 0
+                    ? `+$${balance.toFixed(2)}`
+                    : `-$${Math.abs(balance).toFixed(2)}`}
+                </Text>
               </View>
             ))}
+            <Text style={styles.reimbursementsText}>Reimbursements</Text>
             {reimbursements.map((reimbursement, index) => (
-              <View key={index}>
-                <Text>{reimbursement.from}</Text>
-                <Text>{reimbursement.to}</Text>
-                <Text>{reimbursement.amount.toFixed(2)}</Text>
+              <View key={index} style={styles.reimbursementContainer}>
+                <Text style={styles.largerText}>
+                  {reimbursement.from} owes {reimbursement.to}
+                </Text>
+                <Text style={styles.largerText}>
+                  {reimbursement.amount.toFixed(2)}
+                </Text>
               </View>
             ))}
           </View>
@@ -120,5 +173,98 @@ const Group = ({ route }) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  groupTitleText: {
+    fontSize: 18,
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  tabsRow: {
+    flexDirection: "row",
+    marginBottom: 20,
+  },
+  expensesTab: {
+    padding: 8,
+    borderTopLeftRadius: 4,
+    borderBottomLeftRadius: 4,
+    width: "50%",
+    alignItems: "center",
+  },
+  balancesTab: {
+    padding: 8,
+    borderTopRightRadius: 4,
+    borderBottomRightRadius: 4,
+    width: "50%",
+    alignItems: "center",
+  },
+  activeTab: {
+    borderWidth: 1,
+    borderColor: "#0275d8",
+    backgroundColor: "#0275d8",
+  },
+  inactiveTab: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    backgroundColor: "#ddd",
+  },
+  activeText: {
+    color: "white",
+  },
+  expenseButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#ddd",
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 5,
+  },
+  largerText: {
+    fontSize: 16,
+  },
+  paidByText: {
+    color: "#666",
+  },
+  balancesText: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  balanceRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "#ddd",
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 5,
+  },
+  zeroBalanceText: {
+    fontSize: 16,
+    color: "#666",
+  },
+  positiveBalanceText: {
+    fontSize: 16,
+    color: "#28a745",
+  },
+  negativeBalanceText: {
+    fontSize: 16,
+    color: "#dc3545",
+  },
+  reimbursementsText: {
+    fontSize: 16,
+    marginTop: 20,
+    marginBottom: 5,
+  },
+  reimbursementContainer: {
+    alignItems: "center",
+    backgroundColor: "#ddd",
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 5,
+  },
+});
 
 export default Group;
