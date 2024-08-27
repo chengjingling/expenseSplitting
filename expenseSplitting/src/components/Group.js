@@ -41,9 +41,8 @@ const Group = ({ route }) => {
     for (const expense of expenses) {
       balancesObj[expense.paidBy] += Number(expense.amount);
       for (const participant of expense.participants) {
-        balancesObj[participant] -= (
-          Number(expense.amount) / expense.participants.length
-        ).toFixed(2);
+        balancesObj[participant] -=
+          Number(expense.amount) / expense.participants.length;
       }
     }
     setBalances(balancesObj);
@@ -99,7 +98,7 @@ const Group = ({ route }) => {
             {Object.entries(balances).map(([participant, balance]) => (
               <View key={participant}>
                 <Text>{participant}</Text>
-                <Text>{balance}</Text>
+                <Text>{balance.toFixed(2)}</Text>
               </View>
             ))}
             {reimbursements.map((reimbursement, index) => (
