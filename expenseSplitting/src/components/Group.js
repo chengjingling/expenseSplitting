@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import { getDoc, doc, collection, onSnapshot } from "firebase/firestore";
 import { db } from "../config/firebase";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 const Group = ({ route }) => {
   const { groupTitle } = route.params;
@@ -31,6 +31,12 @@ const Group = ({ route }) => {
       setExpenses(sortedExpensesList);
     });
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      setTab("Expenses");
+    }, [])
+  );
 
   const changeToBalances = () => {
     setTab("Balances");
