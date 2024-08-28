@@ -116,20 +116,26 @@ const Group = ({ route }) => {
           </TouchableOpacity>
         </View>
         {tab === "Expenses" &&
-          expenses.map((expense, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => navigation.navigate("Expense", { expense })}
-              style={styles.expenseButton}
-            >
-              <View>
-                <Text style={styles.largerText}>{expense.title}</Text>
-                <Text style={styles.paidByText}>Paid by {expense.paidBy}</Text>
-              </View>
-              <Text style={styles.largerText}>
-                ${Number(expense.amount).toFixed(2)}
-              </Text>
-            </TouchableOpacity>
+          (expenses.length === 0 ? (
+            <Text style={styles.noExpensesText}>No expenses</Text>
+          ) : (
+            expenses.map((expense, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => navigation.navigate("Expense", { expense })}
+                style={styles.expenseButton}
+              >
+                <View>
+                  <Text style={styles.largerText}>{expense.title}</Text>
+                  <Text style={styles.paidByText}>
+                    Paid by {expense.paidBy}
+                  </Text>
+                </View>
+                <Text style={styles.largerText}>
+                  ${Number(expense.amount).toFixed(2)}
+                </Text>
+              </TouchableOpacity>
+            ))
           ))}
         {tab === "Balances" && (
           <View>
@@ -213,6 +219,11 @@ const styles = StyleSheet.create({
   },
   activeText: {
     color: "white",
+  },
+  noExpensesText: {
+    textAlign: "center",
+    fontSize: 16,
+    color: "#666",
   },
   expenseButton: {
     flexDirection: "row",
