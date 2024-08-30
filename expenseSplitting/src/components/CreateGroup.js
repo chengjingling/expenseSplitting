@@ -58,7 +58,7 @@ const CreateGroup = () => {
       setDoc(newDoc, {
         participants: participants,
       });
-      navigation.navigate("Group", { groupTitle: title });
+      navigation.replace("Group", { groupTitle: title });
     }
   }, [participantsValid]);
 
