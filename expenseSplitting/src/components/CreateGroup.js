@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { doc, collection, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
 
@@ -54,7 +54,7 @@ const CreateGroup = () => {
 
   useEffect(() => {
     if (participantsValid.every((status) => status === "valid")) {
-      const newDoc = doc(collection(db, "groups"), title);
+      const newDoc = doc(db, "groups", title);
       setDoc(newDoc, {
         participants: participants,
       });
@@ -70,6 +70,7 @@ const CreateGroup = () => {
           value={title}
           onChangeText={setTitle}
           style={styles.titleInput}
+          testID="titleInput"
         />
         <Text style={styles.label}>Participants</Text>
         {participants.map((participant, index) => (
@@ -79,6 +80,7 @@ const CreateGroup = () => {
                 value={participant}
                 onChangeText={(text) => handleParticipantChange(text, index)}
                 style={styles.participantInput}
+                testID="participantInput"
               />
               <TouchableOpacity
                 onPress={() =>
