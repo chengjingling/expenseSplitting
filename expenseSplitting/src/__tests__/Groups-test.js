@@ -26,15 +26,11 @@ describe("Groups", () => {
     expect(splitSmartText).toBeTruthy();
   });
 
-  it("render group 1", () => {
+  it("render groups", () => {
     render(<Groups />);
-    const group1 = screen.getByText("Group 1");
-    expect(group1).toBeTruthy();
-  });
-
-  it("render group 2", () => {
-    render(<Groups />);
-    const group2 = screen.getByText("Group 2");
-    expect(group2).toBeTruthy();
+    const titleText1 = screen.getByText("Group 1");
+    expect(titleText1).toBeTruthy();
+    const titleText2 = screen.getByText("Group 2");
+    expect(titleText2).toBeTruthy();
   });
 });

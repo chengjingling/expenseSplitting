@@ -21,7 +21,7 @@ const Group = ({ route }) => {
 
   useEffect(() => {
     (async () => {
-      const groupDoc = await getDoc(doc(collection(db, "groups"), groupTitle));
+      const groupDoc = await getDoc(doc(db, "groups", groupTitle));
       const participants = groupDoc.data().participants;
       setAllParticipants(participants);
     })();
@@ -98,6 +98,7 @@ const Group = ({ route }) => {
               styles.expensesTab,
               tab === "Expenses" ? styles.activeTab : styles.inactiveTab,
             ]}
+            testID="expensesButton"
           >
             <Text style={tab === "Expenses" && styles.activeText}>
               Expenses
@@ -109,6 +110,7 @@ const Group = ({ route }) => {
               styles.balancesTab,
               tab === "Balances" ? styles.activeTab : styles.inactiveTab,
             ]}
+            testID="balancesButton"
           >
             <Text style={tab === "Balances" && styles.activeText}>
               Balances
@@ -169,7 +171,7 @@ const Group = ({ route }) => {
                   {reimbursement.from} owes {reimbursement.to}
                 </Text>
                 <Text style={styles.largerText}>
-                  {reimbursement.amount.toFixed(2)}
+                  ${reimbursement.amount.toFixed(2)}
                 </Text>
               </View>
             ))}
