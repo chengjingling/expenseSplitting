@@ -15,34 +15,24 @@ jest.mock("@react-navigation/native", () => ({
 }));
 
 describe("CreateGroup", () => {
-  it("render title text", () => {
+  it("render title field", () => {
     render(<CreateGroup />);
     const titleText = screen.getByText("Title");
     expect(titleText).toBeTruthy();
-  });
-
-  it("render title input", () => {
-    render(<CreateGroup />);
     const titleInput = screen.getByTestId("titleInput");
     expect(titleInput).toBeTruthy();
   });
 
-  it("render participants text", () => {
+  it("render participants field", () => {
     render(<CreateGroup />);
     const participantsText = screen.getByText("Participants");
     expect(participantsText).toBeTruthy();
-  });
-
-  it("render participant input", () => {
-    render(<CreateGroup />);
     const participantInput = screen.getByTestId("participantInput");
     expect(participantInput).toBeTruthy();
-  });
-
-  it("render remove button", () => {
-    render(<CreateGroup />);
     const removeButton = screen.getByText("Remove");
     expect(removeButton).toBeTruthy();
+    const addParticipantButton = screen.getByText("Add participant");
+    expect(addParticipantButton).toBeTruthy();
   });
 
   it("press remove button", () => {
@@ -51,12 +41,6 @@ describe("CreateGroup", () => {
     fireEvent.press(removeButton);
     const participantInput = screen.queryByTestId("participantInput");
     expect(participantInput).toBeNull();
-  });
-
-  it("render add participant button", () => {
-    render(<CreateGroup />);
-    const addParticipantButton = screen.getByText("Add participant");
-    expect(addParticipantButton).toBeTruthy();
   });
 
   it("press add participant button", () => {

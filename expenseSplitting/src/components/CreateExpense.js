@@ -25,7 +25,7 @@ const CreateExpense = ({ route }) => {
 
   useEffect(() => {
     (async () => {
-      const groupDoc = await getDoc(doc(collection(db, "groups"), groupTitle));
+      const groupDoc = await getDoc(doc(db, "groups", groupTitle));
       const participants = groupDoc.data().participants;
       setAllParticipants(participants);
     })();
@@ -74,6 +74,7 @@ const CreateExpense = ({ route }) => {
           value={expenseTitle}
           onChangeText={setExpenseTitle}
           style={styles.input}
+          testID="titleInput"
         />
         <Text style={styles.label}>Amount</Text>
         <TextInput
@@ -81,12 +82,14 @@ const CreateExpense = ({ route }) => {
           onChangeText={setAmount}
           keyboardType="numeric"
           style={styles.input}
+          testID="amountInput"
         />
         <Text style={styles.label}>Paid by</Text>
         <Picker
           selectedValue={paidBy}
           onValueChange={setPaidBy}
           style={styles.picker}
+          testID="paidByPicker"
         >
           {allParticipants.map((participant, index) => (
             <Picker.Item key={index} label={participant} value={participant} />
@@ -115,6 +118,7 @@ const CreateExpense = ({ route }) => {
                 )
               }
               style={styles.checkbox}
+              testID={participant}
             />
             <Text>{participant}</Text>
           </TouchableOpacity>
