@@ -17,7 +17,7 @@ const Expense = ({ route }) => {
       <View style={styles.container}>
         <Text style={styles.titleText}>{expense.title}</Text>
         <Text style={styles.dateText}>{formattedDateTimeAdded()}</Text>
-        <Text style={styles.paidByText}>Paid By</Text>
+        <Text style={styles.paidByText}>Paid by</Text>
         <View style={styles.row}>
           <Text>{expense.paidBy}</Text>
           <Text style={styles.totalAmountText}>
