@@ -2,7 +2,7 @@
 
 ## About
 
-SplitSmart is a mobile app developed using React Native and Firebase, designed to help users split expenses among friends, family and colleagues. It allows users to add expenses to a group, and the balances and suggested reimbursements are automatically calculated.
+SplitSmart is a mobile app developed using React Native and Firebase, designed to help users split expenses among friends, family and colleagues. It allows users to add expenses to a group, and the balances and suggested reimbursements are automatically calculated. A full demonstration of the application can be found in the [demonstration video](https://github.com/chengjingling/splitSmart/blob/main/Demonstration%20Video.mp4).
 
 ## Groups screen
 
